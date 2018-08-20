@@ -1,0 +1,26 @@
+version: "2.3"
+
+services:
+  spamsink:
+    image: hmlio/spamsink:latest
+    volumes:
+      - ./mails/incoming:/opt/spamsink/mails
+    ports:
+      - "25:25"
+    environment:
+      - SINK_HOSTNAME="mail.example.com"
+      - SINK_PORT=25
+    restart: always
+
+  expose-web:
+    image: halverneus/static-file-server:1.3.0
+    environment:
+      - PORT=80
+      - SHOW_LISTING=true
+      - FOLDER=/web
+    volumes:
+      - ./mails:/web
+    restart: always
+    ports:
+      - "80:80"
+
